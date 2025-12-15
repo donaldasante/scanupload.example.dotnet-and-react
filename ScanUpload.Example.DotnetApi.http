@@ -1,0 +1,5 @@
+@ScanUpload.Example.DotnetApi_HostAddress = https://localhost:7021
+
+###
+POST {{ScanUpload.Example.DotnetApi_HostAddress}}/scanupload-api/session/create
+Accept:application/json
