@@ -44,7 +44,7 @@ app.UseHttpsRedirection();
 // Use CORS
 app.UseCors("ReactApp");
 
-app.UseStaticFiles();
+//app.UseStaticFiles();
 app.UseRouting();
 
 // Serve React app
