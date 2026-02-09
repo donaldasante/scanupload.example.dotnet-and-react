@@ -1,4 +1,12 @@
 @ScanUpload.Example.DotnetApi_HostAddress = https://localhost:7021
+@sessionId = 52NImkmEqwsjSY7jeEpMPjHh17HoPadouAXr0IDK4WU
+
+GET {{ScanUnpload.Api.Client.Test_HostAddress}}/token/
+Accept: application/json
+###
+
+GET {{ScanUnpload.Api.Client.Test_HostAddress}}/cached-token/
+Accept: application/json
 
 ###
 POST {{ScanUpload.Example.DotnetApi_HostAddress}}/scanupload-api/session
@@ -8,3 +16,15 @@ Content-Type: application/json
 { 
 
 }
+
+###
+GET {{ScanUnpload.Api.Client.Test_HostAddress}}/scanupload-api/token
+Accept:application/json
+
+###
+GET {{ScanUnpload.Api.Client.Test_HostAddress}}/scanupload-api/file-management/download-session/{{sessionId}}
+Accept:application/json
+
+###
+GET {{ScanUnpload.Api.Client.Test_HostAddress}}/download-file/{{sessionId}}
+Accept:application/json

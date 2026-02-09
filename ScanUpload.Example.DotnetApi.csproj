@@ -9,7 +9,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.11" />
-    <PackageReference Include="scanupload.api.client" Version="0.1.0-alpha.5" />
+    <PackageReference Include="scanupload.api.client" Version="0.1.0-alpha.7" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.10.0" />	  
   </ItemGroup>
   <PropertyGroup>
     <SpaRoot>client-app\</SpaRoot>
@@ -19,10 +20,7 @@
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish
-        Include="@(DistFiles-&gt;'%(FullPath)')"
-        Exclude="@(ResolvedFileToPublish)"
-      >
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </ResolvedFileToPublish>

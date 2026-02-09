@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { QrCodeGenerator } from "@scanupload/qr-code-generator";
 import "@scanupload/qr-code-generator/dist/qr-code-generator.css";
 
-export default function LoginForm() {
+export default function GeneralForm() {
   const [username, setUsername] = useState("");
 
   const handleSubmit = (e) => {
@@ -11,12 +11,12 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen min-w-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-8 w-full max-w-sm"
+        className="bg-white shadow-lg rounded-lg p-8  max-w-md"
       >
-        <h2 className="text-2xl font-bold text-center mb-6">Form</h2>
+        <h2 className="text-2xl font-bold text-center mb-2">Form</h2>
 
         <div className="mb-4">
           <label
@@ -38,11 +38,13 @@ export default function LoginForm() {
 
         <div className="mb-6">
           <QrCodeGenerator
-            uploadUrl="https://example.com"
+            sessionUrl="/scanupload-api/session"
+            refreshTokenUrl="/scanupload-api/token"
             showHeader={true}
-            header="Scan to upload"
+            header="Scan to upload files from mobile device"
             size="large"
             showLogo={true}
+            clickQrCodeToReload={true}
           />
         </div>
 
