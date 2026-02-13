@@ -30,7 +30,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:3002", "http://react-client:3002") // React default port
+                .WithOrigins(
+                    "http://localhost:3002",
+                    "http://scanupload.react.example.client:3002"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -53,10 +56,7 @@ app.UseHttpsRedirection();
 // Use CORS
 app.UseCors("ReactApp");
 
-//app.UseStaticFiles();
 app.UseRouting();
 
-// Serve React app
-app.MapFallbackToFile("index.html");
 
 app.Run();

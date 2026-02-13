@@ -1,14 +1,7 @@
-# Build stage
-FROM node:latest as build
+FROM node:latest
 WORKDIR /app
-
 COPY package*.json ./
-RUN npm install
-
+RUN yarn install --frozen-lockfile
 COPY . .
-RUN npm run build
-
-# Serve with Nginx
-FROM nginx:latest
-COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 3002
+CMD [ "yarn", "dev" ]

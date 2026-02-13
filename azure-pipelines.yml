@@ -1,0 +1,117 @@
+﻿# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  tags:
+    include:
+    - release.*
+
+resources:
+- repo: self
+
+variables:
+  dockerRegistryServiceConnection: 'ScanUpload Container Registry'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      environment: qa
+    steps:
+    - task: Bash@3
+      displayName: 'Set Docker Tag Variable'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Example using Git tag name directly
+          echo "##vso[task.setvariable variable=dockerImageTag]$(Build.SourceBranchName).$(Build.BuildId)"
+          # Example using short commit hash
+          # echo "##vso[task.setvariable variable=dockerImageTag]$(git rev-parse --short HEAD)"
+    - task: Docker@2
+      displayName: Build ScanUpload Dotnet example API image
+      inputs:
+        command: buildAndPush
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'scanupload-dotnet-example-api'
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: |
+          $(dockerImageTag)
+    - task: Docker@2
+      displayName: Build ScanUpload Hub API image
+      inputs:
+        command: buildAndPush
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: 'scanupload-react-client-example'
+        dockerfile: '$(Build.SourcesDirectory)/client-app/Dockerfile_Prod'
+        buildContext: '$(Build.SourcesDirectory)'
+        tags: |
+          $(dockerImageTag)
+        arguments: |
+          --build-arg ENVIRONMENT=$(environment)
+
+- stage: DeployScanUploadDotnetExample
+  displayName: Deploy ScanUpload dot net example to QA Server
+  jobs:
+  - job: DeployDotnetExampleJob
+    variables:
+    - group: "scanupload-dotnet-example-variables"
+    dependsOn: []
+    pool:
+      name: 'ScanUpload QA'   # your self-hosted agent pool
+    steps:
+    - task: Docker@2
+      displayName: Login to private registry
+      inputs:
+        command: login
+        containerRegistry: $(dockerRegistryServiceConnection)
+    - script: |
+        outdir=/home/donald/apps/scanupload.dotnet.example
+        {
+            echo "containerName=$(containerName)"
+            echo "subDomain=$(subDomain)"
+            echo "ScanUploadProxy__KeycloakClientId=$(ScanUploadProxy:KeycloakClientId)"
+            echo "ScanUploadProxy__KeycloakClientSecret=$(ScanUploadProxy:KeycloakClientSecret)"
+        } > "$outdir/.env"
+      displayName: "Generate .env file scanupload.dotnet.example"
+    - script: |
+        cd /home/donald/apps/scanupload.dotnet.example
+        docker compose down || true   # don’t fail if nothing is running
+        docker compose pull           # ensure latest image
+        docker compose up -d --remove-orphans
+      displayName: Pull and run scanupload.dotnet.example  
+- stage: DeployScanUploadReactClientExample
+  displayName: Deploy ScanUpload react client example to QA Server
+  jobs:
+  - job: DeployReactClientExampleJob
+    variables:
+    - group: "scanupload-react-example-client-variables"
+    dependsOn: []
+    pool:
+      name: 'ScanUpload QA'   # your self-hosted agent pool
+    steps:
+    - task: Docker@2
+      displayName: Login to private registry
+      inputs:
+        command: login
+        containerRegistry: $(dockerRegistryServiceConnection)
+    - script: |
+        outdir=/home/donald/apps/scanupload.react.client.example
+        {
+            echo "dockerImageTag=$(Build.SourceBranchName).$(Build.BuildId)"
+            echo "containerName=$(containerName)"
+            echo "subDomain=$(subDomain)"
+        } > "$outdir/.env"
+      displayName: "Generate .env file scanupload.react.client.example"
+    - script: |
+        cd /home/donald/apps/scanupload.react.client.example
+        docker compose down || true   # don’t fail if nothing is running
+        docker compose pull           # ensure latest image
+        docker compose up -d --remove-orphans
+      displayName: Pull and run scanupload.react.client.example       

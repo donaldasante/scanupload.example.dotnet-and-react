@@ -2,6 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+const isDocker = process.env.DOCKER === "true";
+
+const apiTarget = isDocker
+  ? "http://scanupload.dotnet.example:8080"
+  : "https://localhost:7021";
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
@@ -11,13 +17,13 @@ export default defineConfig({
     port: 3002, // Or your desired port
     proxy: {
       "/api": {
-        target: "https://localhost:7021",
+        target: apiTarget,
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
       "/scanupload-api": {
-        target: "https://localhost:7021",
+        target: apiTarget,
         changeOrigin: true,
         secure: false,
       },
