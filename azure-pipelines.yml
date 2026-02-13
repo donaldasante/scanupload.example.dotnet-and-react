@@ -50,7 +50,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: 'scanupload-react-client-example'
         dockerfile: '$(Build.SourcesDirectory)/client-app/Dockerfile_Prod'
-        buildContext: '$(Build.SourcesDirectory)'
+        buildContext: '$(Build.SourcesDirectory)/client-app'
         tags: |
           $(dockerImageTag)
         arguments: |
