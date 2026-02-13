@@ -1,5 +1,4 @@
 using ScanUpload.Api.Client.Extensions;
-using ScanUpload.Api.Client.Middleware;
 using ScanUpload.Api.Client.Proxy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,14 +11,12 @@ builder.Services.AddOpenApi();
 builder.Services.Configure<ScanUploadProxyOptions>(
     builder.Configuration.GetSection("ScanUploadProxy")
 );
-builder.Services.AddScanUploadProxy(builder.Configuration.GetSection("ScanUploadProxy").Bind);
 
 builder.Services.AddScanUploadProxy(builder.Configuration.GetSection("ScanUploadProxy").Bind, builder =>
 {
     builder.AddStandardResilienceHandler();
 });
 
-builder.Services.AddTransient<AuthenticatedHttpClientHandler>();
 builder.Services.AddScanUploadApiClient(builder.Configuration, builder =>
 {
     builder.AddStandardResilienceHandler();
@@ -33,7 +30,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:3002") // React default port
+                .WithOrigins("http://localhost:3002", "http://react-client:3002") // React default port
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();

@@ -3,13 +3,7 @@ import "./App.css";
 import GeneralForm from "./GeneralForm";
 
 function App() {
-  return (
-    <>
-      <div className="App">
-        <GeneralForm />
-      </div>
-    </>
-  );
+  return <GeneralForm />;
 }
 
 export default App;
