@@ -3,7 +3,7 @@ import { QrCodeGenerator } from "@scanupload/qr-code-generator";
 import "@scanupload/qr-code-generator/dist/qr-code-generator.css";
 
 export default function GeneralForm() {
-  const [showQrCodeLogo, setShowQrCodeLogo] = useState(false);
+  const [showQrCodeLogo, setShowQrCodeLogo] = useState(true);
   const [clickQrcodeReload, setClickQrcodeReload] = useState(true);
   const [showHeader, setShowHeader] = useState(true);
   const [filePreviewMode, setFilePreviewMode] = useState("list");
@@ -23,14 +23,11 @@ export default function GeneralForm() {
           <h2 className="text-2xl font-bold text-center mb-2">Example Form</h2>
 
           <div className="mb-6">
-            <label
-              htmlFor="options"
-              className="block text-sm font-medium text-left text-gray-700 mb-3"
-            >
+            <h6 className="block text-sm font-medium text-left text-gray-700 mb-3">
               QR Code generator options
-            </label>
+            </h6>
             <div className="flex flex-col items-keft space-x-1">
-              <div class="flex items-center gap-0">
+              <div className="flex items-center gap-0">
                 <input
                   id="checkQrCodeLogo"
                   type="checkbox"
@@ -39,28 +36,28 @@ export default function GeneralForm() {
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2"
                 />
                 <label
-                  htmlFor="options"
+                  htmlFor="checkQrCodeLogo"
                   className="text-sm font-medium text-gray-700 select-none cursor-pointer w-20 text-left"
                 >
                   Show Logo
                 </label>
               </div>
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <input
-                  id="checkQrCodeReload"
+                  id="checkQrCodeLogo"
                   type="checkbox"
                   checked={clickQrcodeReload}
                   onChange={() => setClickQrcodeReload(!clickQrcodeReload)}
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2"
                 />
                 <label
-                  htmlFor="options"
+                  htmlFor="checkQrCodeLogo"
                   className="text-sm font-medium text-gray-700 select-none cursor-pointer w-40 text-left"
                 >
                   Click QR code to reload
                 </label>
               </div>
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <input
                   id="checkHeader"
                   type="checkbox"
@@ -69,13 +66,13 @@ export default function GeneralForm() {
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2"
                 />
                 <label
-                  htmlFor="options"
+                  htmlFor="checkHeader"
                   className="text-sm font-medium text-gray-700 select-none cursor-pointer  w-25 text-left"
                 >
                   Show header
                 </label>
               </div>
-              <div class="flex items-center mt-4">
+              <div className="flex items-center mt-4">
                 <label
                   htmlFor="headerText"
                   className="text-sm font-medium text-gray-700 select-none cursor-pointer  w-25 text-left"
@@ -95,14 +92,13 @@ export default function GeneralForm() {
                 <div className="text-sm font-medium text-gray-700 select-none cursor-pointer  text-left">
                   File preview mode
                 </div>
-                <div class="flex flex-row items-start ">
+                <div className="flex flex-row items-start ">
                   <div className=" flex flex-row items-start mt-3 space-x-4">
                     <label className="flex items-center cursor-pointer group">
                       <input
                         type="radio"
                         name="file-preview-mode-list"
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        defaultChecked
                         checked={filePreviewMode === "list"}
                         onChange={() => setFilePreviewMode("list")}
                       />
@@ -131,7 +127,7 @@ export default function GeneralForm() {
                 <div className="text-sm font-medium text-gray-700 select-none cursor-pointer  text-left">
                   Qr Code size
                 </div>
-                <div class="flex flex-row items-start ">
+                <div className="flex flex-row items-start ">
                   <div className=" flex flex-row items-start mt-3 space-x-4">
                     <label className="flex items-center cursor-pointer group">
                       <input
@@ -139,7 +135,6 @@ export default function GeneralForm() {
                         name="qr-code-size-small"
                         checked={qrCodeSize === "small"}
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        defaultChecked
                         onChange={() => setQrCodeSize("small")}
                       />
                       <span className="ml-3 text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">
