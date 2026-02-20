@@ -77,7 +77,7 @@ stages:
     - script: |
         outdir=/home/donald/apps/scanupload.dotnet.example
         {
-            echo "dockerImageTag=qa
+            echo "dockerImageTag=qa"
             echo "containerName=$(containerName)"
             echo "subDomain=$(subDomain)"
             echo "ScanUploadProxy__KeycloakClientId=$(ScanUploadProxy:KeycloakClientId)"
