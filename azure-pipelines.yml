@@ -15,7 +15,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: Build Docker images
   jobs:
   - job: Build
     displayName: Build
@@ -46,7 +46,7 @@ stages:
           $(dockerImageTag)
           $(qaTag)
     - task: Docker@2
-      displayName: Build ScanUpload Hub API image
+      displayName: Build ScanUpload React Client example image
       inputs:
         command: buildAndPush
         containerRegistry: $(dockerRegistryServiceConnection)
