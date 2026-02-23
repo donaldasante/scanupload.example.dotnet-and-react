@@ -66,7 +66,7 @@ stages:
 
         git remote add github https://$(GITHUB_PAT)@github.com/donaldasante/scanupload.example.dotnet-and-react.git || true
 
-        git push github HEAD:refs/heads/main
+        git push github HEAD:refs/heads/main --force
         git push github --tags
       displayName: Mirror repo to GitHub
 
