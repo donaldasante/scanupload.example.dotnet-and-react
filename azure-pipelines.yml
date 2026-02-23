@@ -26,6 +26,8 @@ stages:
     variables:
     - group: "scanupload-dotnet-example-variables"  
     steps:
+    - checkout: self 
+      fetchDepth: 0
     - task: Bash@3
       displayName: 'Set Docker Tag Variable'
       inputs:
@@ -63,6 +65,7 @@ stages:
     - script: |
         git config --global user.email "azdo_ci@scanupload.net"
         git config --global user.name "Azure DevOps CI"
+        git config --global http.postBuffer 524288000
 
         git remote add github https://$(GITHUB_PAT)@github.com/donaldasante/scanupload.example.dotnet-and-react.git || true
 
