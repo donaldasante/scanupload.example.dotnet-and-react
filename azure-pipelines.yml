@@ -20,13 +20,11 @@ stages:
   displayName: Build Docker images
   jobs:
   - job: Build
-  variables:
-  - group: "scanupload-dotnet-example-variables"  
     displayName: Build
     pool:
       vmImage: ubuntu-latest
     variables:
-      environment: qa
+    - group: "scanupload-dotnet-example-variables"  
     steps:
     - task: Bash@3
       displayName: 'Set Docker Tag Variable'
