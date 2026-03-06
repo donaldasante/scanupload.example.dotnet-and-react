@@ -26,6 +26,7 @@ export default defineConfig({
         target: apiTarget,
         changeOrigin: true,
         secure: false,
+        ws: true, // Enable WebSocket support for SignalR
       },
     },
   },
