@@ -196,7 +196,7 @@ export default function GeneralForm() {
               clickQrCodeToReload={clickQrcodeReload}
               filePreviewMode={filePreviewMode}
               classNames={{
-                qrWrapper: "rounded-none border-solid border-blue-500",
+                qrWrapper: "rounded-none border-solid border-purple-500",
                 reloadButton: "bg-red-500 hover:bg-red-700",
                 header: "text-2xl font-bold text-purple-700",
               }}
