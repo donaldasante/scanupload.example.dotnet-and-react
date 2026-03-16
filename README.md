@@ -1,10 +1,10 @@
 ﻿# ScanUpload dot net and react example
 
-[ScanUpload](https://qa-app.scanupload.net/) enables the integration and the ability to use QR codes to scan and upload files directly from a mobile device to your webapp.
+[ScanUpload](https://app.scanupload.net/) enables the integration and the ability to use QR codes to scan and upload files directly from a mobile device to your webapp.
 
 
 # Quickstart
-1. Please generate a client id and secret at [ScanUpload](https://qa-app.scanupload.net/) and save the details.
+1. Please generate a client id and secret at [ScanUpload](https://app.scanupload.net/) and save the details.
 
 ## Docker
 You need to have [Docker Desktop](https://www.docker.com/products/docker-desktop/) and git installed on your machine.
