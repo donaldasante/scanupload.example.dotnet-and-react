@@ -8,6 +8,14 @@
     <UserSecretsId>2ed1566d-69e7-4504-897c-184d85202fbe</UserSecretsId>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+    <ItemGroup>
+	    <Content Update="appsettings.Prod.json">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </Content>
+	    <Content Update="appsettings.Qa.json">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </Content>
+    </ItemGroup>	
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
