@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { QrCodeGenerator } from "@scanupload/qr-code-generator";
-import "@scanupload/qr-code-generator/dist/qr-code-generator.css";
+import { QrCodeGenerator } from "@scanupload/qr-code-generator-react";
+import "@scanupload/qr-code-generator-react/dist/index.css";
+import "./scanupload-override.css";
 
 export default function GeneralForm() {
   const [showQrCodeLogo, setShowQrCodeLogo] = useState(true);
@@ -195,11 +196,6 @@ export default function GeneralForm() {
               showLogo={showQrCodeLogo}
               clickQrCodeToReload={clickQrcodeReload}
               filePreviewMode={filePreviewMode}
-              classNames={{
-                qrWrapper: "rounded-none border-solid border-purple-500",
-                reloadButton: "bg-red-500 hover:bg-red-700",
-                header: "text-2xl font-bold text-purple-700",
-              }}
             />
           </div>
 
@@ -209,6 +205,18 @@ export default function GeneralForm() {
           >
             Submit
           </button>
+
+          <p className="mt-4 text-center text-sm text-gray-500">
+            View the{" "}
+            <a
+              href="https://github.com/donaldasante/scanupload.example.dotnet-and-react"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              source code on GitHub
+            </a>
+          </p>
         </form>
       </div>
     </div>
