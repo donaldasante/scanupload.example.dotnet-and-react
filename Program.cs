@@ -1,4 +1,6 @@
 using ScanUpload.Api.Client.Extensions;
+using ScanUpload.Api.Client.Interface;
+using ScanUpload.Api.Client.KeycloakIntegration;
 using ScanUpload.Api.Client.Proxy;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,5 +60,46 @@ app.UseCors("ReactApp");
 
 app.UseRouting();
 
+app.MapGet(
+    "/download-file/{sessionId}",
+    async (string sessionId, IScanUploadApiClient scanUploadApiClient, CancellationToken cancellationToken) =>
+    {
+        try
+        {
+            var outputStream = new MemoryStream();
+            bool filesReceived = false;
 
-app.Run();
+            using (var archive = new System.IO.Compression.ZipArchive(outputStream, System.IO.Compression.ZipArchiveMode.Create, leaveOpen: true))
+            {
+                await scanUploadApiClient.DownloadAsync(sessionId, async (name, stream, ct) =>
+                {
+                    Console.WriteLine($"Received file: {name}");
+                    var entry = archive.CreateEntry(name);
+                    using (var entryStream = entry.Open())
+                    {
+                        await stream.CopyToAsync(entryStream, ct);
+                    }
+                    filesReceived = true;
+                }, cancellationToken);
+            }
+
+            if (!filesReceived)
+            {
+                return Results.NotFound(new { error = "No files found for the given session ID" });
+            }
+
+            outputStream.Position = 0;
+            return Results.File(outputStream, "application/zip", $"{sessionId}.zip");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+        {
+            return Results.Conflict(new { error = "Session unavailable or already processed" });
+        }
+        catch (KeycloakException ex)
+        {
+            return Results.BadRequest(new { error = ex.Message });
+        }
+    }
+);
+
+await app.RunAsync();

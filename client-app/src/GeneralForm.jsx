@@ -10,15 +10,61 @@ export default function GeneralForm() {
   const [filePreviewMode, setFilePreviewMode] = useState("list");
   const [headerText, setHeaderText] = useState("Scan to upload");
   const [qrCodeSize, setQrCodeSize] = useState("large");
-  const handleSubmit = (e) => {
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState(null);
+
+  const handleDownload = async (e) => {
     e.preventDefault();
+    setDownloadError(null);
+
+    const raw = localStorage.getItem("qrcode-last-session-ids");
+    const sessionId = raw ? JSON.parse(raw)[0] : null;
+    if (!sessionId) {
+      setDownloadError(
+        "No active session found. Please scan the QR code first.",
+      );
+      return;
+    }
+
+    setDownloading(true);
+    try {
+      const response = await fetch(
+        `/api/download-file/${encodeURIComponent(sessionId)}`,
+      );
+      if (!response.ok) {
+        const json = await response.json().catch(() => ({}));
+        setDownloadError(json.error || "Download failed.");
+        return;
+      }
+
+      const disposition = response.headers.get("Content-Disposition");
+      let fileName = "download";
+      if (disposition) {
+        const match =
+          disposition.match(/filename\*=UTF-8''([^;]+)/i) ||
+          disposition.match(/filename="?([^";]+)"?/i);
+        if (match) fileName = decodeURIComponent(match[1]);
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = fileName;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setDownloadError("Download failed. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
     <div className="bg-gray-100">
       <div className="flex items-center justify-center min-h-screen min-w-screen">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleDownload}
           className="bg-white shadow-lg rounded-lg p-8  max-w-md"
         >
           <h2 className="text-2xl font-bold text-center mb-2">Example Form</h2>
@@ -201,10 +247,16 @@ export default function GeneralForm() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            disabled={downloading}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit
+            {downloading ? "Downloading..." : "Download Files"}
           </button>
+          {downloadError && (
+            <p className="mt-2 text-sm text-center text-red-600">
+              {downloadError}
+            </p>
+          )}
 
           <p className="mt-4 text-center text-sm text-gray-500">
             View the{" "}
