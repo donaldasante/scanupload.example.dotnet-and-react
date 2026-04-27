@@ -258,6 +258,15 @@ export default function GeneralForm() {
             </p>
           )}
 
+          <p className="mt-4 text-center text-sm">
+            <a
+              href="https://app.scanupload.net/"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Back to ScanUpload
+            </a>
+          </p>
+
           <p className="mt-4 text-center text-sm text-gray-500">
             View the{" "}
             <a
