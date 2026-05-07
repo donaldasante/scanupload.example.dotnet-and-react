@@ -82,7 +82,7 @@ stages:
     - group: "scanupload-dotnet-example-variables"
     dependsOn: []
     pool:
-      name: 'ScanUpload QA'   # your self-hosted agent pool
+      name: 'ScanUpload QA New'   # your self-hosted agent pool
     steps:
     - task: Docker@2
       displayName: Login to private registry
@@ -113,7 +113,7 @@ stages:
     - group: "scanupload-react-example-client-variables"
     dependsOn: []
     pool:
-      name: 'ScanUpload QA'   # your self-hosted agent pool
+      name: 'ScanUpload QA New'   # your self-hosted agent pool
     steps:
     - task: Docker@2
       displayName: Login to private registry
